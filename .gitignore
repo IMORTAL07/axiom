@@ -1,0 +1,13 @@
+# Build directories
+build/
+out/
+
+# Visual Studio / VS Code
+.vscode/
+*.user
+*.vcxproj*
+*.sln
+
+# OS files
+Thumbs.db
+.DS_Store

@@ -1,4 +1,6 @@
 #include "axiom/Engine.h"
+#include "axiom/System.h"
+
 #include <iostream>
 #include <chrono>
 
@@ -9,9 +11,20 @@ namespace axiom
     {
     }
 
+    void Engine::addSystem(std::unique_ptr<System> system)
+    {
+        m_systems.push_back(std::move(system));
+    }
+
     void Engine::initialize()
     {
         std::cout << "Axiom Engine initializing...\n";
+
+        for (auto& system : m_systems)
+        {
+            system->onInitialize();
+        }
+
         m_running = true;
     }
 
@@ -36,19 +49,19 @@ namespace axiom
 
     void Engine::update(double deltaTime)
     {
-        // TEMP: print delta time once per second approx
-        static double accumulator = 0.0;
-        accumulator += deltaTime;
-
-        if (accumulator >= 1.0)
+        for (auto& system : m_systems)
         {
-            std::cout << "Engine running... dt = " << deltaTime << " seconds\n";
-            accumulator = 0.0;
+            system->onUpdate(deltaTime);
         }
     }
 
     void Engine::shutdown()
     {
+        for (auto& system : m_systems)
+        {
+            system->onShutdown();
+        }
+
         std::cout << "Axiom Engine shutting down...\n";
     }
 

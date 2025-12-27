@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(axiom STATIC
     engine/core/Engine.cpp
+    engine/systems/TestSystem.cpp
 )
 
 target_include_directories(axiom

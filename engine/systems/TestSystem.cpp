@@ -1,4 +1,5 @@
 #include "axiom/systems/TestSystem.h"
+#include "axiom/ecs/EntityManager.h"
 #include <iostream>
 
 namespace axiom
@@ -6,18 +7,23 @@ namespace axiom
     void TestSystem::onInitialize()
     {
         std::cout << "[TestSystem] Initialized\n";
+
+        EntityManager em;
+        Entity e1 = em.createEntity();
+        Entity e2 = em.createEntity();
+
+        std::cout << "[TestSystem] Created entities: "
+                  << e1 << ", " << e2 << "\n";
+
+        em.destroyEntity(e1);
+        Entity e3 = em.createEntity();
+
+        std::cout << "[TestSystem] Reused entity: "
+                  << e3 << "\n";
     }
 
-    void TestSystem::onUpdate(double deltaTime)
+    void TestSystem::onUpdate(double)
     {
-        static double accumulator = 0.0;
-        accumulator += deltaTime;
-
-        if (accumulator >= 1.0)
-        {
-            std::cout << "[TestSystem] Updating...\n";
-            accumulator = 0.0;
-        }
     }
 
     void TestSystem::onShutdown()

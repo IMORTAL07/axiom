@@ -1,5 +1,8 @@
 #include "axiom/systems/TestSystem.h"
 #include "axiom/ecs/EntityManager.h"
+#include "axiom/ecs/ComponentStorage.h"
+#include "axiom/ecs/Transform.h"
+
 #include <iostream>
 
 namespace axiom
@@ -9,17 +12,20 @@ namespace axiom
         std::cout << "[TestSystem] Initialized\n";
 
         EntityManager em;
-        Entity e1 = em.createEntity();
-        Entity e2 = em.createEntity();
+        Entity entity = em.createEntity();
 
-        std::cout << "[TestSystem] Created entities: "
-                  << e1 << ", " << e2 << "\n";
+        ComponentStorage<Transform> transforms;
 
-        em.destroyEntity(e1);
-        Entity e3 = em.createEntity();
+        transforms.add(entity, {10.0f, 20.0f});
 
-        std::cout << "[TestSystem] Reused entity: "
-                  << e3 << "\n";
+        if (transforms.has(entity))
+        {
+            auto& t = transforms.get(entity);
+            std::cout << "[TestSystem] Entity "
+                      << entity
+                      << " Transform = ("
+                      << t.x << ", " << t.y << ")\n";
+        }
     }
 
     void TestSystem::onUpdate(double)
